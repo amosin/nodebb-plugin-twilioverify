@@ -36,7 +36,7 @@ plugin.verifyUser = function(params, callback) {
 	const channel = 'sms';
 	let verificationRequest;
 
-	user.getUserField(params.uid, 'phoneNumber', function async(err, phoneNumber) {
+	user.getUserField(params.uid, 'phoneNumber', async function(err, phoneNumber) {
 		try {
 			console.log('Phone numer:' + req.user.phoneNumber + 'channel?' + channel);
 			verificationRequest = await twilio.verify.services(verificactionSid)
@@ -95,7 +95,7 @@ plugin.addAdminNavigation = function (header, callback) {
 	callback(null, header);
 };
 
-myPlugin.filterUserCreate = function (hookData, callback) {
+plugin.filterUserCreate = function (hookData, callback) {
     hookData.user.phoneNumber = hookData.data.phoneNumber;
     callback(null, hookData);
 };
