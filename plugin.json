@@ -1,0 +1,38 @@
+{
+	"id": "nodebb-plugin-twilioverify",
+	"url": "https://github.com/amosin/nodebb-plugin-twilioverify",
+	"library": "./library.js",
+	"hooks": [
+		{
+			"hook": "static:app.load", "method": "init"
+		},
+		{
+			"hook": "filter:user.verify.code", "method": "generateCode"
+		},
+		{
+			"hook": "action:user.verify", "method": "verifyUser"
+		},
+		{
+			"hook": "filter:register.build", "method": "addCaptcha"
+		},
+		{
+			"hook": "filter:user.custom_fields", "method": "setMobileNumber"
+		},
+		{
+			"hook": "filter:admin.header.build", "method": "addAdminNavigation"
+		},
+		{
+			"hook": "filter:register.complete", "method": "redirectToConfirm"
+		}
+	],
+	"staticDirs": {
+		"static": "./static"
+	},
+	"less": [
+		"static/style.less"
+	],
+	"scripts": [
+		"static/lib/main.js"
+	],
+	"templates": "static/templates"
+}
