@@ -2,53 +2,87 @@
 
 const controllers = require('./lib/controllers');
 
-const plugin = {};
+const plugin = {},
+    meta = module.parent.require('./meta'),
+	user = module.parent.require('./user'),
+	nconf = module.parent.require('nconf');
+
+	var accountSid = meta.config['twilio:sid'],
+		authToken = meta.config['twilio:token'],
+		verificactionSid = meta.config['twilio:verificactiondid'];
 
 plugin.init = function (params, callback) {
 	const router = params.router;
 	const hostMiddleware = params.middleware;
-	// const hostControllers = params.controllers;
+	//const hostControllers = params.controllers;
 
-	// We create two routes for every view. One API call, and the actual route itself.
-	// Just add the buildHeader middleware to your route and NodeBB will take care of everything for you.
+	//TODO move to controller
+	// router.get('/verify', hostMiddleware.buildHeader, controllers.renderConfirm);
+	// router.get('/api/verify', controllers.renderConfirm);
+	router.get('/verify', hostMiddleware.buildHeader, renderConfirm);
+	router.post('/verify', hostMiddleware.buildHeader, checkCode);
+	router.get('/api/verify', renderConfirm);
 
-	router.get('/admin/plugins/quickstart', hostMiddleware.admin.buildHeader, controllers.renderAdminPage);
-	router.get('/api/admin/plugins/quickstart', controllers.renderAdminPage);
+	router.get('/admin/twilio', hostMiddleware.admin.buildHeader, renderAdmin);
+	router.get('/api/admin/twilio', renderAdmin);
 
 	callback();
 };
 
-/**
- * If you wish to add routes to NodeBB's RESTful API, listen to the `static:app.routes` hook.
- * Define your routes similarly to above, and allow core to handle the response via the
- * built-in helpers.formatApiResponse() method.
- *
- * In this example route, the `authenticate` middleware is added, which means a valid login
- * session or bearer token (which you can create via ACP > Settings > API Access) needs to be
- * passed in.
- *
- * To call this example route:
- *   curl -X GET \
- * 		http://example.org/api/v3/plugins/foobar/test \
- * 		-H "Authorization: Bearer some_valid_bearer_token"
- *
- * Will yield the following response JSON:
- * 	{
- *		"status": {
- *			"code": "ok",
- *			"message": "OK"
- *		},
- *		"response": {
- *			"foobar": "test"
- *		}
- *	}
- */
-plugin.addRoutes = async ({ router, middleware, helpers }) => {
-	router.get('/quickstart/:param1', middleware.authenticate, (req, res) => {
-		helpers.formatApiResponse(200, res, {
-			foobar: req.params.param1,
-		});
+
+plugin.verifyUser = function(params, callback) {
+	const twilio = require('twilio')(accountSid, authToken);
+	const errors = { wasValidated: false };
+	const channel = 'sms';
+	let verificationRequest;
+
+	user.getUserField(params.uid, 'phoneNumber', function async(err, phoneNumber) {
+		try {
+			console.log('Phone numer:' + req.user.phoneNumber + 'channel?' + channel);
+			verificationRequest = await twilio.verify.services(verificactionSid)
+			  .verifications
+			  .create({ to: phoneNumber, channel });
+		  } catch (e) {
+			console.log(e);
+			return res.status(500).send(e);
+		  }
 	});
+};
+
+
+function checkCode(req, res, next) {
+	if (req.user && req.user.uid) {
+		user.getUserField(req.user.uid, 'phoneNumber', function(err, phoneNumber) {
+			console.log('post to API');
+		});
+	} else {
+		res.redirect('/login');
+	}
+}
+
+function renderConfirm(req, res, next) {
+	if (req.user && req.user.uid) {
+		user.getUserField(req.user.uid, 'phoneNumber', function(err, phoneNumber) {
+			res.render('verify', {
+				"phoneNumber": phoneNumber
+			});
+		});
+	} else {
+		res.redirect('/login');
+	}
+}
+
+function renderAdmin(req, res, next) {
+	res.render('admin/twilio', {});
+}
+
+plugin.addCaptcha = function(params, callback) {
+	params.data.captcha = {
+		label: 'Phone Number (for verification)',
+		html: '<input class="form-control" type="text" placeholder="Phone Number" name="phoneNumber" id="phoneNumber" />'
+	};
+
+	callback(null, params);
 };
 
 plugin.addAdminNavigation = function (header, callback) {
@@ -59,6 +93,26 @@ plugin.addAdminNavigation = function (header, callback) {
 	});
 
 	callback(null, header);
+};
+
+myPlugin.filterUserCreate = function (hookData, callback) {
+    hookData.user.phoneNumber = hookData.data.phoneNumber;
+    callback(null, hookData);
+};
+
+plugin.addAdminNavigation = function(header, callback) {
+	header.plugins.push({
+		route: '/twilio',
+		icon: 'fa-mobile',
+		name: 'Twilio Verification'
+	});
+
+	callback(null, header);
+};
+
+plugin.redirectToConfirm = function(params, callback) {
+	params.referrer = nconf.get('relative_path') + '/verify';
+	callback(null, params);
 };
 
 module.exports = plugin;
