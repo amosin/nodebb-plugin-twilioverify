@@ -77,10 +77,15 @@ function renderAdmin(req, res, next) {
 }
 
 plugin.addCaptcha = function(params, callback) {
-	params.data.captcha = {
+	var captcha = {
 		label: 'Phone Number (for verification)',
 		html: '<input class="form-control" type="text" placeholder="Phone Number" name="phoneNumber" id="phoneNumber" />'
 	};
+	if (params.templateData.regFormEntry && Array.isArray(params.templateData.regFormEntry)) {
+		params.templateData.regFormEntry.push(captcha);
+	} else {
+		params.templateData.captcha = captcha;
+	}
 
 	callback(null, params);
 };
