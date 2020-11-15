@@ -38,7 +38,7 @@ plugin.verifyUser = function(params, callback) {
 
 	user.getUserField(params.uid, 'phoneNumber', async function(err, phoneNumber) {
 		try {
-			console.log('Phone numer:' + req.user.phoneNumber + 'channel?' + channel);
+			console.log('Phone numer:' + phoneNumber + 'channel?' + channel);
 			verificationRequest = await twilio.verify.services(verificactionSid)
 			  .verifications
 			  .create({ to: phoneNumber, channel });
@@ -51,10 +51,14 @@ plugin.verifyUser = function(params, callback) {
 
 
 function checkCode(req, res, next) {
+    var verified = false;
 	if (req.user && req.user.uid) {
 		user.getUserField(req.user.uid, 'phoneNumber', function(err, phoneNumber) {
-			console.log('post to API');
+			console.log('Check code ' + req.body.verificationCode + ' with phone' + phoneNumber);
 		});
+        if (!verified) {
+            return res.redirect(nconf.get('relative_path') + '/verify');
+        }
 	} else {
 		res.redirect('/login');
 	}
@@ -116,7 +120,7 @@ plugin.addAdminNavigation = function(header, callback) {
 };
 
 plugin.redirectToConfirm = function(params, callback) {
-	params.referrer = nconf.get('relative_path') + '/verify';
+	params.referrer = '/verify';
 	callback(null, params);
 };
 
