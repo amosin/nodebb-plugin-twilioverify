@@ -1,0 +1,15 @@
+{
+    "phone_verification": "Phone Verification",
+    "why_verify": "If you verify your phone numer you will be allowed to vote on topics, publish and receive rewards immediately. Also you will not need to confirm your e-mail.",
+    "phone_already_verified": "Your phone number is already verified!",
+    "phonenumber": "Phone Number (mobile):",
+    "send_new_code": "Send New Code",
+    "phonenumber-taken": "This phone number is already being used.",
+    "phone_changed": "Phone number changed sucessfully!",
+    "same_number": "Same Number!",
+    "something_wrong": "Something went wrong :(",
+    "time_expired": "Your time to send validation code expired. Please get new code.",
+    "invalid_code": "The code you have entered is invalid.",
+    "too_many_attempts": "You tried too many times!!!",
+    "user_verified": "Code accepted! You are now verified!"
+}

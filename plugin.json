@@ -7,16 +7,13 @@
 			"hook": "static:app.load", "method": "init"
 		},
 		{
-			"hook": "action:user.verify", "method": "verifyUser"
-		},
-		{
-			"hook": "filter:register.build", "method": "addCaptcha"
-		},
-		{
-			"hook": "filter:user.create", "method": "filterUserCreate"
-		},
-		{
 			"hook": "filter:admin.header.build", "method": "addAdminNavigation"
+		},
+		{
+			"hook": "static:user.delete", "method": "deleteUserPhone"
+		},
+		{
+			"hook": "filter:user.whitelistFields", "method": "whitelistField"
 		},
 		{
 			"hook": "filter:register.complete", "method": "redirectToConfirm"
@@ -31,5 +28,6 @@
 	"scripts": [
 		"static/lib/main.js"
 	],
-	"templates": "./templates"
+	"templates": "./templates",
+    "languages": "./languages"
 }
