@@ -2,11 +2,12 @@
 
 const controllers = require('./lib/controllers');
 
-const plugin = {},
-    meta = module.parent.require('./meta'),
-	user = module.parent.require('./user'),
-	db = module.parent.require('./database'),
-	nconf = module.parent.require('nconf');
+const plugin = {};
+
+    var db = require.main.require('./src/database');
+    var meta = require.main.require('./src/meta');
+    var user = require.main.require('./src/user');
+    var nconf = require.main.require('nconf');
 
 	var accountSid = meta.config['twilio:sid'],
 		authToken = meta.config['twilio:token'],
@@ -90,7 +91,7 @@ function checkCode(req, res, next) {
     var verificationResult;
 	if (req.user && req.user.uid) {
 		user.getUserField(req.user.uid, 'phoneNumber', async function(err, phoneNumber) {
-			console.log('Checking code: ' + code + ' with phone: ' + phoneNumber);
+			//console.log('Checking code: ' + code + ' with phone: ' + phoneNumber);
             try {
               verificationResult = await twilio.verify.services(verificactionSid)
                 .verificationChecks
@@ -129,7 +130,7 @@ function checkCode(req, res, next) {
 async function renderConfirm(req, res, next) {
 	if (req.user && req.user.uid) {
         const userData = await user.getUserFields(req.user.uid, ['phoneNumber', 'phoneNumber:verified']);
-        console.log(userData);
+        //console.log(userData);
 		res.render('verify', userData);
 	} else {
 		res.redirect('/login');
@@ -167,7 +168,7 @@ plugin.redirectToConfirm = function(params, callback) {
 
 plugin.deleteUserPhone = async function(params, callback) {
     let userPhone = await user.getUserField(params.uid, 'phoneNumber');
-    console.log('lets delete UID phone number' + params.uid + ' ' + userPhone);
+    //console.log('lets delete UID phone number' + params.uid + ' ' + userPhone);
     await db.sortedSetRemove('phonenumbers:uid', userPhone);
 }
 plugin.whitelistField = function (hookData, callback) {
