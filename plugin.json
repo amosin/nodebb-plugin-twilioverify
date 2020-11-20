@@ -16,6 +16,9 @@
 			"hook": "filter:user.whitelistFields", "method": "whitelistField"
 		},
 		{
+			"hook": "filter:user.account.edit", "method": "accountEdit"
+		},
+		{
 			"hook": "filter:register.complete", "method": "redirectToConfirm"
 		}
 	],

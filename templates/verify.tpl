@@ -19,14 +19,14 @@
                             <input class="form-control form-control-lg" type="tel" id="inputPhoneNumber" value="{phoneNumber}" name="phoneNumber" style="padding-left: 80px;"/>
 						</div>
 					</div>
-                    <input id="phone_full" type="hidden" name="phone_full">
+          <input id="phone_full" type="hidden" name="phone_full">
 					<input type="hidden" id="inputUID" value="{uid}"><br />
 					<input type="hidden" id="phoneVerified" value="{phoneNumber.verified}"><br />
-                    <input type="hidden" name="_csrf" value="{config.csrf_token}" />
+          <input type="hidden" name="_csrf" value="{config.csrf_token}" />
 
 					<div class="form-actions">
-						<a id="cancelBtn" onclick="location.href='{config.relative_path}';" href="#" class="btn btn-sescundary">[[global:close]]</a>
-                        <a id="submitBtn" href="#" class="btn btn-primary">[[global:save_changes]]</a>
+						<a id="cancelBtn" onclick="location.href=appRoot;" href="#" class="btn btn-sescundary">[[global:close]]</a>
+            <a id="submitBtn" href="#" class="btn btn-primary">[[global:save_changes]]</a>
 					</div>
 
 				</form>
@@ -37,6 +37,20 @@
 
 	</div>
 <script>
+(function()
+{
+  if( window.localStorage )
+  {
+    if( !localStorage.getItem('firstLoad') )
+    {
+      localStorage['firstLoad'] = true;
+      window.location.reload();
+    }  
+    else
+      localStorage.removeItem('firstLoad');
+  }
+})();
+
   document.title = '[[verify:phone_verification]]'
   var head = document.getElementsByTagName('HEAD')[0];
   var link = document.createElement('link');
@@ -54,7 +68,7 @@
       preferredCountries: ["br", "us"],
   });
 </script>
-<!-- IF !phoneNumber:verified -->
+
 <br />
     <div class="row justify-content-center" id="verifyCodeBlock" style="display: none;">
     <div class="card col-lg-4">
@@ -69,16 +83,17 @@
           <div class="form-group">
             <input type="hidden" name="_csrf" value="{config.csrf_token}" />
             <input type="hidden" value="{phoneNumber}" name="phoneNumberForCode" />
-            <label for="verificationCode">Verification Code</label>
+            <button type="button" class="btn btn-danger" onclick="sendNewCode($('#inputUID').val(), iti.getNumber());">[[verify:send_new_code]]</button><br />
+            <label for="verificationCode">[[verify:verification_code]]</label>
             <input class="form-control" id="code" name="verificationCode" required="" placeholder="Confirmation Code"><br />
           </div>
 
           <button class="btn btn-primary btn-block" type="submit">Verify</button>
-          <button type="button" class="btn btn-info btn-block" onclick="sendNewCode($('#inputUID').val(), iti.getNumber());">[[verify:send_new_code]]</button>
-          <button class="btn btn-secundary btn-block" onclick="location.href='{config.relative_path}';" type="button">Skip</button>
+          
+          <button class="btn btn-secundary btn-block" onclick="location.href=appRoot;" type="button">Skip</button>
         </form>
           </br>
       </div>
     </div>
   </div>
-<!-- ENDIF !phoneNumber:verified -->
+

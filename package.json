@@ -1,6 +1,6 @@
 {
   "_from": "git+https://github.com/amosin/nodebb-plugin-twilioverify.git",
-  "_id": "nodebb-plugin-twilioverify@0.0.1",
+  "_id": "nodebb-plugin-twilioverify@0.0.2",
   "_inBundle": false,
   "_integrity": "",
   "_location": "/nodebb-plugin-twilioverify",
@@ -62,5 +62,5 @@
     "type": "git",
     "url": "git+https://github.com/amosin/nodebb-plugin-twilioverify.git"
   },
-  "version": "0.0.1"
+  "version": "0.0.2"
 }

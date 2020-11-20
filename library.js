@@ -120,6 +120,8 @@ function checkCode(req, res, next) {
                     await user.setUserField(req.uid, 'email:confirmed', 1);
                 }
                 res.status(200).send('[[verify:user_verified]]');
+            } else {
+                res.status(500).send('[[verify:invalid_code]]');
             }
 
 		});
@@ -177,12 +179,12 @@ plugin.whitelistField = function (hookData, callback) {
 };
 
 //TODO filter:account/edit.build
-//plugin.accountEditPhoneVerify = function(hookData, callback) {
-//    hookData.templateData.editButtons.push({
-//		link: '/verify',
-//		text: '[[verify:user_verification]]'
-//	});
-//   callback(null, hookData);
-//};
+plugin.accountEdit = function(hookData, callback) {
+   hookData.editButtons.push({
+		link: '/verify',
+		text: '[[verify:user_verification]]'
+	});
+  callback(null, hookData);
+};
 
 module.exports = plugin;

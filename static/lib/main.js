@@ -3,14 +3,13 @@
 /* globals document, $ */
 
 const registrationReferrer = location.protocol + '//' + location.host + config.relative_path + '/register/complete?registered=true'
+const appRoot = location.protocol + '//' + location.host + config.relative_path
 
 $(document).ready(function () {
     if (window.location.pathname === config.relative_path + '/verify') {
-        if ($('#inputPhoneNumber').val()) {
-             $('#verifyCodeBlock').show();
+        if (ajaxify.data.phoneNumber.verified) {
+            $('#verifyCodeBlock').hide();
         }
-        //app.alertSuccess('[[verify:sent_confirmation_code]]');
-        //$('#sentVerificationCode').show();
     }
 });
 
@@ -30,7 +29,7 @@ $('#verify-form').on('submit', (e) => {
                 success: function (data) {
                     console.log(data);
                     app.alertSuccess('verified!');
-                    return location.href = config.relative_path;
+                    return location.href = appRoot;
                 },
                 error: function (xhr, status, errorThrown) {
                     return app.alertError(xhr.responseText);
@@ -44,6 +43,10 @@ $('#submitBtn').on('click', updatePhoneNumber);
 
 
 	function updatePhoneNumber() {
+        if (ajaxify.data.phoneNumber === iti.getNumber()) {
+            $('#verifyCodeBlock').show();
+            return app.alertSuccess('[[verify:same_number]]');
+        }
         $.ajax(config.relative_path + '/api/updatephone', {
             data: {
 			    uid: $('#inputUID').val(),
