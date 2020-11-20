@@ -10,14 +10,15 @@
 
 # ACP
 
-<img width="964" alt="Admin Page" src="https://github.com/amosin/nodebb-plugin-twilioverify/screenshot/screenshot_admin.png">
+<img width="964" alt="Admin Page" src="https://github.com/amosin/nodebb-plugin-twilioverify/blob/master/screenshot/screenshot_admin.png">
  
 # Registration Verifiacation
 
-<img width="964" alt="Registration Verifiacation" src="https://github.com/amosin/nodebb-plugin-twilioverify/screenshot/screenshot_verify.png">
+<img width="964" alt="Registration Verifiacation" src="https://github.com/amosin/nodebb-plugin-twilioverify/blob/master/screenshot/screenshot_verify.png">
 
 
 # What you get
 
 User variable = phoneNumber and phoneNumber:verified (true/false)
+
 
