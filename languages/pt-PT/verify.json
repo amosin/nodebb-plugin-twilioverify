@@ -14,5 +14,6 @@
     "too_many_attempts": "Você tentou muitas vezes !!!",
     "user_verified": "Código aceito! Agora você está verificado!",
     "user_verification": "Verificação do Usuário",
-    "phonenumber_already_verified": "Este número de telefone já foi verificado!"
+    "phonenumber_already_verified": "Este número de telefone já foi verificado!",
+    "just_sent_code_message": "Acabamos de enviar a você um código de confirmação. Se você não receber um nos próximos minutos, clique no botão <b>Enviar Novo Código</b> para gerar um novo código."
 }

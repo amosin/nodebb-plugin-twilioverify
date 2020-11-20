@@ -75,9 +75,7 @@
       <div class="card-body">
 
 <div id="sentVerificationCode" style="display: none;">
-      <p>We've just sent you a confirmation code.
-      If you don't receive one in the next few minutes,
-      click on [[verify:send_new_code]] button to generate a new code. </p>
+      <p>[[verify:just_sent_code_message]]</p>
 </div>
         <form class="needs-validation" id="verify-form" method="post" novalidate="">
           <div class="form-group">
